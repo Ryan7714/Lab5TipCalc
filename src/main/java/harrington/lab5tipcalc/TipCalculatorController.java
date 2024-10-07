@@ -39,6 +39,10 @@ public class TipCalculatorController {
    // calculates and displays the tip and total amounts
    @FXML
    private void calculateButtonPressed(ActionEvent event) {
+      calculateTip();
+   }
+
+   private void calculateTip(){
       try {
          BigDecimal amount = new BigDecimal(amountTextField.getText());
          BigDecimal tip = amount.multiply(tipPercentage);
@@ -54,24 +58,44 @@ public class TipCalculatorController {
       }
    }
 
+
+
    // called by FXMLLoader to initialize the controller
    public void initialize() {
       // 0-4 rounds down, 5-9 rounds up 
       currency.setRoundingMode(RoundingMode.HALF_UP);
-      
-      // listener for changes to tipPercentageSlider's value
+
       tipPercentageSlider.valueProperty().addListener(
          new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> ov, 
+            public void changed(ObservableValue<? extends Number> ov,
                Number oldValue, Number newValue) {
-               tipPercentage = 
+               tipPercentage =
                   BigDecimal.valueOf(newValue.intValue() / 100.0);
                tipPercentageLabel.setText(percent.format(tipPercentage));
+               calculateTip();
             }
          }
       );
+      amountTextField.textProperty().addListener(
+           new ChangeListener<String>() {
+              @Override
+              public void changed(ObservableValue<? extends String> ov,
+                                  String oldValue, String newValue) {
+                 try {
+                    new BigDecimal(amountTextField.getText());
+                    calculateTip();
+                 }catch (NumberFormatException e) {
+                    System.out.print("");
+                 }
+
+              }
+           }
+      );
    }
+
+
+
 }
 
 /**************************************************************************
