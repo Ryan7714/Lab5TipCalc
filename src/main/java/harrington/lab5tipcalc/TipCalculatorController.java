@@ -88,7 +88,6 @@ public class TipCalculatorController {
                  }catch (NumberFormatException e) {
                     System.out.print("");
                  }
-
               }
            }
       );
